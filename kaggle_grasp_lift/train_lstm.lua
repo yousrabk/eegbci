@@ -8,8 +8,6 @@ require 'gnuplot'
 require 'util.print'
 require 'util.misc'
 
-local debugger = require('fb.debugger')
-
 local MODEL_ID = torch.randn(1)[1]
 local model_utils = require 'util.model_utils'
 local LSTM = require 'modules.LSTM'
@@ -102,7 +100,6 @@ if string.len(opt.init_from) > 0 then
     end
     val_losses = checkpoint.val_losses
 else
-    debugger.enter()
     print('creating an LSTM with ' .. opt.rnn_size .. ' units in ' .. opt.num_layers .. ' layers')
     protos = {}
     protos.rnn, forget_gates = LSTM.lstm(loader.input_dim, loader.label_dim, opt.rnn_size, opt.num_layers, opt.dropout) -- TODO: set proper size
@@ -288,7 +285,7 @@ for i = start_iter, iterations do
                 i, iterations, epoch, train_loss, grad_norm / param_norm, param_norm, time))
         local ct = 0;
         local xAxis = torch.Tensor(#train_losses_avg):apply(function() ct = ct + 1; return ct; end)
-        gnuplot.plot(xAxis, torch.Tensor(train_losses_avg))
+        -- gnuplot.plot(xAxis, torch.Tensor(train_losses_avg))
     end
 
     -- exponential learning rate decay

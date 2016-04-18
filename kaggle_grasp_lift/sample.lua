@@ -19,7 +19,7 @@ cmd:option('-seed',123,'random number generator\'s seed')
 cmd:option('-gpuid',0,'which gpu to use. -1 = use CPU')
 cmd:option('-data_dir','data/preprocessed','directory containing sampled files')
 cmd:option('-submission',false,'sample test set instead of validation set')
-cmd:option('-calc_roc',false,'')
+cmd:option('-calc_roc',true,'')
 cmd:text()
 
 -- clear old sampled files
@@ -157,5 +157,6 @@ end
 
 if not opt.submission and opt.calc_roc then
   print("calculating ROC")
-  os.execute('python3 python_utils/calc_roc.py')
+  os.execute('python python_utils/calc_roc.py')
 end
+

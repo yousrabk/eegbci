@@ -6,7 +6,7 @@ from os.path import isfile, join
 from time import sleep
 from sys import platform
 
-val_path = 'sampled_files'
+val_path = 'tmp/sampled_files'
 sampled_files = [ f for f in listdir(val_path) if isfile(join(val_path,f)) ]
 num_classes = 6
 
@@ -68,4 +68,4 @@ if platform == 'linux':
     plt.show()
 else:
     plt.show(block=False)
-    input('Press ENTER to continue... ')
+    raw_input('Press ENTER to continue... ')
