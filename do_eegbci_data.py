@@ -39,6 +39,7 @@ for subject in range(1, n_subjs + 1):
     # Make data csv files 
     df_data = raw.to_data_frame()
     df_data.index = [subj_name + '%s' %ind for ind in index]
+    df_data.keys().insert(0, 'id')
 
     #####################
     # Make events csv files: we keep only events 2 and 3 for hands/feet
@@ -56,11 +57,36 @@ for subject in range(1, n_subjs + 1):
     d['feet'].index = [subj_name + '%s' %ind for ind in index]
     df_events = pd.DataFrame(d)
 
+    tmp_data, tmp_events = 'tmp_data.csv', 'tmp_events.csv'
+    df_data.to_csv(tmp_data)
+    df_events.to_csv(tmp_events)
+
     # Save the data/events
     if serie <= 12:
         data_name = 'data/train/' + subj_name + 'data.csv'
         events_name = 'data/train/' + subj_name + 'events.csv'
-        df_events.to_csv(events_name)
+        with open(tmp_events, 'rb') as csvfile, open(events_name, 'wb') as outfile:
+            r = csv.reader(csvfile, delimiter=',', quotechar='"')
+            headers=r.next()
+            headers[0] = 'id'
+
+            w = csv.writer(outfile, delimiter=',', quotechar='"')
+            w.writerow(headers)
+            for line in r:
+                w.writerow(line)
+        csvfile.close()
+        outfile.close()
     else:
         file_name = 'data/test/' + subj_name + 'data.csv'
-    df_data.to_csv(data_name)
+
+    with open(tmp_data, 'rb') as csvfile, open(data_name, 'wb') as outfile:
+        r = csv.reader(csvfile, delimiter=',', quotechar='"')
+        headers=r.next()
+        headers[0] = 'id'
+
+        w = csv.writer(outfile, delimiter=',', quotechar='"')
+        w.writerow(headers)
+        for line in r:
+            w.writerow(line)
+    csvfile.close()
+    outfile.close()
