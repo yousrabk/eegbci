@@ -19,16 +19,22 @@ for subject in range(1, n_subjs + 1):
     if subject == 88 or subject == 89 or subject == 92 or subject == 100 \
         or subject == 110:
         continue
-
-    # Concatenate subjects as series. We obtain at the end 7 subjects
-    # each one having 15 series. We learn on 12 subjects and try to 
-    # generalize on the 3 left. Do this 7 times.
-    new_subj, serie = (subject - 1) // 15 + 1, (subject - 1) % 15 + 1
-    subj_name = 'subj%s_series%s_' % (new_subj, serie)
     raw_fnames = eegbci.load_data(subject, runs)
     raw_files = [read_raw_edf(f, preload=True) for f in raw_fnames]
     raw = concatenate_raws(raw_files)
     index = np.round(raw.times * 1000.).astype(int)
+
+    # Concatenate subjects as series. We obtain at the end 7 subjects
+    # each one having 15 series. We learn on 12 subjects and try to 
+    # generalize on the 3 left. Do this 7 times.
+    if subject >= 90 and subject < 92:
+        subject -= 2
+    elif subject >=92 and subject < 100:
+        subject -= 3
+    elif subject >= 100 and subject < 110:
+        subject -= 4
+    new_subj, serie = (subject - 1) // 15 + 1, (subject - 1) % 15 + 1
+    subj_name = 'subj%s_series%s_' % (new_subj, serie)
 
     # Events from STI 
     ev = raw.copy().pick_channels(['STI 014'])[0][0][0]
@@ -77,7 +83,7 @@ for subject in range(1, n_subjs + 1):
         csvfile.close()
         outfile.close()
     else:
-        file_name = 'data/test/' + subj_name + 'data.csv'
+        data_name = 'data/test/' + subj_name + 'data.csv'
 
     with open(tmp_data, 'rb') as csvfile, open(data_name, 'wb') as outfile:
         r = csv.reader(csvfile, delimiter=',', quotechar='"')
