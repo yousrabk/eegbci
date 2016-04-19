@@ -1,3 +1,6 @@
+import sys
+subject_id = sys.argv[1]
+
 import matplotlib
 matplotlib.use('Agg')
 import pandas as pd
@@ -65,7 +68,7 @@ plt.ylabel('True Positive Rate')
 plt.title('Average AUC: {:0.6f}'.format(avg_roc_all / len(sampled_files)))
 plt.legend(loc="lower right")
 
-plt.savefig("test.png")
+plt.savefig("test_%s.png" % subject_id)
 
 # non-blocking show doesn't work on my linux
 if platform == 'linux':

@@ -157,6 +157,6 @@ end
 
 if not opt.submission and opt.calc_roc then
   print("calculating ROC")
-  os.execute('python python_utils/calc_roc.py')
+  os.execute('python python_utils/calc_roc.py $1')
 end
 
