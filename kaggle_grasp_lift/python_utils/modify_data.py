@@ -21,11 +21,11 @@ data_in_path = "data/train/subj{0}_series{1}_data.csv"
 events_in_path = "data/train/subj{0}_series{1}_events.csv"
 data_out_path = "data/preprocessed/subj{0}_series{1}_data.csv"
 events_out_path = "data/preprocessed/subj{0}_series{1}_events.csv"
-num_subjects = 12
-num_series = 8
+num_subjects = 7
+num_series = 12
 total_samples = 0
 total_used_samples = 0
-event_length = 150 // args.subsample
+event_length = 655 # // args.subsample
 if args.subject == -1:
   subjects = range(1, num_subjects + 1)
 else:
@@ -33,9 +33,9 @@ else:
 
 seed(123)
 
-if 150 % args.subsample != 0:
-  print("Subsample should divide 150!")
-  quit()
+# if 150 % args.subsample != 0:
+#   print("Subsample should divide 150!")
+#   quit()
 
 # remove old files
 print('removing old files...')
@@ -64,38 +64,30 @@ for i in range(0, args.num_val_files):
 # list test files
 test_files = set()
 for subj in subjects:
-    for series in range(9, 10 + 1):
+    for series in range(13, 15 + 1):
         test_files.add((subj, series))
 
 def filterData(data_df, events_df):
     global args
     global event_length
     # find event indices
-    hs_df = events_df[events_df['HandStart'] != 0].id
-    fdt_df = events_df[events_df['FirstDigitTouch'] != 0].id
-    bslp_df = events_df[events_df['BothStartLoadPhase'] != 0].id
-    lo_df = events_df[events_df['LiftOff'] != 0].id
-    r_df = events_df[events_df['Replace'] != 0].id
-    br_df = events_df[events_df['BothReleased'] != 0].id
+    hs_df = events_df[events_df['hands'] != 0].id
+    ft_df = events_df[events_df['feet'] != 0].id
     num_events = hs_df.count() // event_length
 
     # check if it's one of the strange files
     counts = [
         hs_df.count(),
-        fdt_df.count(),
-        bslp_df.count(),
-        lo_df.count(),
-        r_df.count(),
-        br_df.count()
+        ft_df.count(),
     ]
     file_is_ok = True
     for i in range(1, len(counts)):
         if counts[0] != counts[i]:
             file_is_ok = False
 
-    if not file_is_ok or counts[0] % event_length != 0:
-        print('there is a problem with this file...')
-        return None, None
+    # if not file_is_ok or counts[0] % event_length != 0:
+    #     print('there is a problem with this file...')
+    #     return None, None
 
     # the file has to be ok now
     print('found:     ' + str(num_events) + ' events')
@@ -129,7 +121,7 @@ def filterData(data_df, events_df):
 
 # we want inclusive ranges
 for subj in subjects:
-    for series in range(1, 10 + 1):
+    for series in range(1, 15 + 1):
 
         # load files
         print('reading file for subject {}, series {}'.format(subj, series))
