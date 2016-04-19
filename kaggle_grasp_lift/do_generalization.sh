@@ -28,14 +28,12 @@ echo "$i: $best_checkpoint" >> best_losses
 # setup data for testing
 num_subjects=12
 for ((i=1; i <= $num_subjects; i++)); do
-	if [ $i -ne $1 ]; then
-		echoHeader "testing subject: $i"
-		sh setup.sh $i
+	echoHeader "testing subject: $i"
+	sh setup.sh $i
 
-		echoHeader "Sampling validation set"
-		th sample.lua cv/$best_checkpoint
+	echoHeader "Sampling validation set"
+	th sample.lua cv/$best_checkpoint
 
-		python python_utils/calc_roc.py $i
-	fi
+	python python_utils/calc_roc.py $i
 
 done
