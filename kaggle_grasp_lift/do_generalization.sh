@@ -33,7 +33,7 @@ for ((i=1; i <= $num_subjects; i++)); do
 		sh setup.sh $i
 
 		echoHeader "Sampling validation set"
-		th sample.lua cv/$best_checkpoint $i
+		th sample.lua cv/$best_checkpoint
 
 		python python_utils/calc_roc.py $i
 	fi
