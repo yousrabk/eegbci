@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
@@ -63,9 +65,11 @@ plt.ylabel('True Positive Rate')
 plt.title('Average AUC: {:0.6f}'.format(avg_roc_all / len(sampled_files)))
 plt.legend(loc="lower right")
 
+plt.savefig("test.png")
+
 # non-blocking show doesn't work on my linux
 if platform == 'linux':
     plt.show()
 else:
     plt.show(block=False)
-    raw_input('Press ENTER to continue... ')
+    #raw_input('Press ENTER to continue... ')
