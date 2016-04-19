@@ -34,8 +34,8 @@ for ((i=1; i <= $num_subjects; i++)); do
 
 		echoHeader "Sampling validation set"
 		th sample.lua cv/$best_checkpoint $i
-	fi
 
-	python python_utils/calc_roc.py $i
+		python python_utils/calc_roc.py $i
+	fi
 
 done
